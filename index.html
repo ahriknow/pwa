@@ -143,6 +143,13 @@
                             </div>
                             <button class="btn-danger" id="clearData">清除数据</button>
                         </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>📲 安装到手机</h4>
+                                <p id="installTip">点击按钮查看安装指引</p>
+                            </div>
+                            <button class="btn-primary" id="showInstallGuide">安装指引</button>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -162,6 +169,21 @@
             <div class="install-buttons">
                 <button id="installBtn" class="btn-primary">安装</button>
                 <button id="dismissBtn" class="btn-secondary">稍后</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 安装指引弹窗 -->
+    <div id="installGuideModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📲 安装到主屏幕</h3>
+                <button class="modal-close" id="closeInstallGuide">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="installGuideContent">
+                    <!-- 动态生成 -->
+                </div>
             </div>
         </div>
     </div>

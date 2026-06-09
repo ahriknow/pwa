@@ -329,6 +329,12 @@ class AhriKnowApp {
 
     // 安装提示
     setupInstallPrompt() {
+        // 检测是否已安装
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            return; // 已安装，不显示提示
+        }
+
+        // 监听自动安装事件
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             this.deferredPrompt = e;
@@ -364,6 +370,156 @@ class AhriKnowApp {
             console.log('App installed');
             document.getElementById('installPrompt').style.display = 'none';
         });
+
+        // 设置手动安装指引
+        this.setupInstallGuide();
+    }
+
+    // 手动安装指引
+    setupInstallGuide() {
+        const showBtn = document.getElementById('showInstallGuide');
+        const closeBtn = document.getElementById('closeInstallGuide');
+        const modal = document.getElementById('installGuideModal');
+
+        if (showBtn) {
+            showBtn.addEventListener('click', () => {
+                this.showInstallGuide();
+                modal.style.display = 'flex';
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // 点击背景关闭
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // 更新安装提示文本
+        const installTip = document.getElementById('installTip');
+        if (installTip) {
+            const browser = this.detectBrowser();
+            if (browser === 'safari-ios') {
+                installTip.textContent = '使用Safari浏览器，点击分享按钮安装';
+            } else if (browser === 'miui' || browser === 'xiaomi') {
+                installTip.textContent = '使用小米浏览器，点击菜单添加到桌面';
+            } else if (browser === 'chrome') {
+                installTip.textContent = '点击菜单 → 添加到主屏幕';
+            } else {
+                installTip.textContent = '点击按钮查看安装指引';
+            }
+        }
+    }
+
+    // 检测浏览器
+    detectBrowser() {
+        const ua = navigator.userAgent.toLowerCase();
+        if (/iphone|ipad|ipod/.test(ua) && /safari/.test(ua) && !/chrome/.test(ua)) {
+            return 'safari-ios';
+        }
+        if (/miui/.test(ua) || /xiaomi/.test(ua)) {
+            return 'miui';
+        }
+        if (/chrome/.test(ua) && !/edge/.test(ua)) {
+            return 'chrome';
+        }
+        if (/samsungbrowser/.test(ua)) {
+            return 'samsung';
+        }
+        if (/firefox/.test(ua)) {
+            return 'firefox';
+        }
+        return 'other';
+    }
+
+    // 显示安装指引
+    showInstallGuide() {
+        const content = document.getElementById('installGuideContent');
+        if (!content) return;
+
+        const browser = this.detectBrowser();
+        let steps = [];
+
+        switch (browser) {
+            case 'safari-ios':
+                steps = [
+                    { icon: '📱', text: '确保使用Safari浏览器打开本页面' },
+                    { icon: '📤', text: '点击底部工具栏的「分享」按钮' },
+                    { icon: '⬇️', text: '在弹出菜单中找到「添加到主屏幕」' },
+                    { icon: '✅', text: '点击「添加」完成安装' }
+                ];
+                break;
+            case 'miui':
+            case 'xiaomi':
+                steps = [
+                    { icon: '📱', text: '使用小米浏览器打开本页面' },
+                    { icon: '☰', text: '点击底部或右上角的「菜单」按钮' },
+                    { icon: '➕', text: '找到「添加到桌面」或「添加快捷方式」' },
+                    { icon: '✅', text: '确认添加即可' }
+                ];
+                break;
+            case 'samsung':
+                steps = [
+                    { icon: '📱', text: '使用三星浏览器打开本页面' },
+                    { icon: '☰', text: '点击右下角的「菜单」按钮' },
+                    { icon: '➕', text: '选择「添加页面到」→「主屏幕」' },
+                    { icon: '✅', text: '点击「添加」完成安装' }
+                ];
+                break;
+            case 'chrome':
+                steps = [
+                    { icon: '📱', text: '使用Chrome浏览器打开本页面' },
+                    { icon: '⋮', text: '点击右上角的「更多」菜单(三个点)' },
+                    { icon: '➕', text: '选择「添加到主屏幕」' },
+                    { icon: '✅', text: '确认名称后点击「添加」' }
+                ];
+                break;
+            case 'firefox':
+                steps = [
+                    { icon: '📱', text: '使用Firefox浏览器打开本页面' },
+                    { icon: '⋮', text: '点击右上角的「更多」菜单' },
+                    { icon: '➕', text: '选择「添加到主屏幕」' },
+                    { icon: '✅', text: '确认添加即可' }
+                ];
+                break;
+            default:
+                steps = [
+                    { icon: '📱', text: '使用浏览器打开本页面' },
+                    { icon: '☰', text: '点击浏览器菜单按钮' },
+                    { icon: '➕', text: '找到「添加到主屏幕」或「添加快捷方式」' },
+                    { icon: '✅', text: '确认添加即可' }
+                ];
+        }
+
+        const browserNames = {
+            'safari-ios': 'Safari (iOS)',
+            'miui': '小米浏览器',
+            'xiaomi': '小米浏览器',
+            'samsung': '三星浏览器',
+            'chrome': 'Chrome',
+            'firefox': 'Firefox',
+            'other': '当前浏览器'
+        };
+
+        content.innerHTML = `
+            <div class="install-browser-tag">${browserNames[browser] || '当前浏览器'}</div>
+            ${steps.map((step, i) => `
+                <div class="install-guide-step">
+                    <div class="step-number">${i + 1}</div>
+                    <div class="step-content">
+                        <p><span class="step-icon">${step.icon}</span>${step.text}</p>
+                    </div>
+                </div>
+            `).join('')}
+        `;
     }
 }
 
