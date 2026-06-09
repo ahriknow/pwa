@@ -1,0 +1,28 @@
+{
+    "name": "AhriKnow WPA",
+    "short_name": "AhriKnow",
+    "description": "支持手机和电脑的渐进式Web应用",
+    "start_url": "/ahriknow-wpa/",
+    "scope": "/ahriknow-wpa/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#1a73e8",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "icons/icon-192.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "icons/icon-192.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["productivity", "utilities"],
+    "lang": "zh-CN",
+    "dir": "ltr"
+}

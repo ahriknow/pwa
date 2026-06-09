@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a73e8">
+    <meta name="description" content="AhriKnow WPA - 支持手机和电脑的渐进式Web应用">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">
+    <link rel="apple-touch-icon" href="icons/icon-192.svg">
+    <title>AhriKnow WPA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="container">
+                <h1 class="logo">📱 AhriKnow WPA</h1>
+                <nav class="nav">
+                    <button class="nav-btn active" data-tab="home">首页</button>
+                    <button class="nav-btn" data-tab="collect">收集</button>
+                    <button class="nav-btn" data-tab="settings">设置</button>
+                </nav>
+                <button class="menu-toggle" id="menuToggle">☰</button>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="container">
+                <!-- 首页 -->
+                <section id="home" class="tab-content active">
+                    <div class="welcome-card">
+                        <h2>👋 欢迎使用 AhriKnow WPA</h2>
+                        <p>这是一个支持手机和电脑的渐进式Web应用</p>
+                        <div class="features">
+                            <div class="feature-card">
+                                <span class="feature-icon">📱</span>
+                                <h3>手机端</h3>
+                                <p>响应式设计，完美适配移动设备</p>
+                            </div>
+                            <div class="feature-card">
+                                <span class="feature-icon">💻</span>
+                                <h3>电脑端</h3>
+                                <p>大屏优化，提供桌面级体验</p>
+                            </div>
+                            <div class="feature-card">
+                                <span class="feature-icon">🔄</span>
+                                <h3>离线支持</h3>
+                                <p>Service Worker支持离线访问</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <h3>📊 数据统计</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-number" id="collectCount">0</span>
+                                <span class="stat-label">已收集</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="todayCount">0</span>
+                                <span class="stat-label">今日新增</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 收集页面 -->
+                <section id="collect" class="tab-content">
+                    <div class="collect-card">
+                        <h2>📝 数据收集</h2>
+                        <form id="collectForm" class="collect-form">
+                            <div class="form-group">
+                                <label for="title">标题</label>
+                                <input type="text" id="title" placeholder="请输入标题" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="content">内容</label>
+                                <textarea id="content" placeholder="请输入内容" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">分类</label>
+                                <select id="category">
+                                    <option value="note">笔记</option>
+                                    <option value="idea">想法</option>
+                                    <option value="task">任务</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary">💾 保存收集</button>
+                        </form>
+                    </div>
+                    <div class="list-card">
+                        <h3>📋 收集列表</h3>
+                        <div class="filter-bar">
+                            <button class="filter-btn active" data-filter="all">全部</button>
+                            <button class="filter-btn" data-filter="note">笔记</button>
+                            <button class="filter-btn" data-filter="idea">想法</button>
+                            <button class="filter-btn" data-filter="task">任务</button>
+                        </div>
+                        <ul id="collectList" class="collect-list">
+                            <!-- 动态生成 -->
+                        </ul>
+                        <p id="emptyTip" class="empty-tip">暂无收集内容</p>
+                    </div>
+                </section>
+
+                <!-- 设置页面 -->
+                <section id="settings" class="tab-content">
+                    <div class="settings-card">
+                        <h2>⚙️ 设置</h2>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>🌙 深色模式</h4>
+                                <p>切换深色/浅色主题</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="darkMode">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>🔔 通知提醒</h4>
+                                <p>开启推送通知</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="notifications">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>📦 离线缓存</h4>
+                                <p>当前缓存状态: <span id="cacheStatus">检查中...</span></p>
+                            </div>
+                            <button class="btn-secondary" id="clearCache">清除缓存</button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>🗑️ 清除数据</h4>
+                                <p>清除所有本地收集数据</p>
+                            </div>
+                            <button class="btn-danger" id="clearData">清除数据</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2026 AhriKnow WPA. 支持手机和电脑访问</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 安装提示 -->
+    <div id="installPrompt" class="install-prompt" style="display: none;">
+        <div class="install-content">
+            <p>📲 添加到主屏幕获得更好体验</p>
+            <div class="install-buttons">
+                <button id="installBtn" class="btn-primary">安装</button>
+                <button id="dismissBtn" class="btn-secondary">稍后</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
