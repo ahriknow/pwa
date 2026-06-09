@@ -317,7 +317,9 @@ class AhriKnowApp {
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async () => {
                 try {
-                    const registration = await navigator.serviceWorker.register('/ahriknow-wpa/sw.js');
+                    // 动态获取SW路径，兼容本地和GitHub Pages
+                    const swPath = window.location.pathname.replace(/\/$/, '') + '/sw.js';
+                    const registration = await navigator.serviceWorker.register(swPath);
                     console.log('SW registered:', registration.scope);
                     this.updateCacheStatus();
                 } catch (error) {

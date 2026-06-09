@@ -1,5 +1,13 @@
-const CACHE_NAME = 'ahriknow-wpa-v2';
-const BASE_PATH = '/ahriknow-wpa/';
+const CACHE_NAME = 'ahriknow-wpa-v3';
+
+// 获取基础路径（兼容本地和GitHub Pages）
+function getBasePath() {
+    const path = self.location.pathname;
+    // 移除sw.js文件名，获取目录路径
+    return path.replace(/sw\.js$/, '');
+}
+
+const BASE_PATH = getBasePath();
 const urlsToCache = [
     BASE_PATH,
     BASE_PATH + 'index.html',
